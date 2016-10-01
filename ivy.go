@@ -18,8 +18,6 @@ import (
 	"robpike.io/ivy/run"
 	"robpike.io/ivy/scan"
 	"robpike.io/ivy/value"
-
-	"honnef.co/go/js/dom"
 )
 
 var (
@@ -38,7 +36,11 @@ var (
 	context value.Context
 )
 
-var document = dom.GetWindow().Document()
+var (
+	stdin  io.Reader = os.Stdin
+	stdout io.Writer = os.Stdout
+	stderr io.Writer = os.Stderr
+)
 
 func main() {
 	flag.Usage = usage
@@ -49,29 +51,12 @@ func main() {
 		os.Exit(2)
 	}
 
-	// The default os.Stdout, os.Stderr are printed to browser's console, which isn't a friendly interface.
-	// Create an implementation of stdout, stderr, stdin that uses a <pre> and <input> html elements.
-	stdout := NewWriter(document.GetElementByID("output").(*dom.HTMLPreElement))
-	stderr := NewWriter(document.GetElementByID("output").(*dom.HTMLPreElement))
-	stdin := NewReader(document.GetElementByID("input").(*dom.HTMLInputElement))
-
-	// Send a copy of stdin to stdout (like in most terminals).
-	stdin = io.TeeReader(stdin, stdout)
-
-	// When console is clicked, focus the input element.
-	// TODO: Make it possible/friendlier to copy the text from stdout...
-	document.GetElementByID("console").AddEventListener("click", false, func(event dom.Event) {
-		document.GetElementByID("input").(dom.HTMLElement).Focus()
-		event.PreventDefault()
-	})
-
-	conf.SetOutput(stdout)
-	conf.SetErrOutput(stderr)
-
 	if *gformat {
 		*format = "%.12g"
 	}
 
+	conf.SetOutput(stdout)
+	conf.SetErrOutput(stderr)
 	conf.SetFormat(*format)
 	conf.SetMaxBits(*maxbits)
 	conf.SetMaxDigits(*maxdigits)
