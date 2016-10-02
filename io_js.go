@@ -29,16 +29,16 @@ func init() {
 }
 
 // NewReader takes an <input> element and makes an io.Reader out of it.
-func NewReader(e *dom.HTMLInputElement) io.Reader {
+func NewReader(input *dom.HTMLInputElement) io.Reader {
 	r := &reader{
 		in: make(chan []byte),
 	}
-	e.AddEventListener("keydown", false, func(event dom.Event) {
+	input.AddEventListener("keydown", false, func(event dom.Event) {
 		ke := event.(*dom.KeyboardEvent)
 		go func() {
 			if ke.KeyCode == '\r' {
-				r.in <- []byte(e.Value + "\n")
-				e.Value = ""
+				r.in <- []byte(input.Value + "\n")
+				input.Value = ""
 				ke.PreventDefault()
 			}
 		}()
@@ -61,15 +61,15 @@ func (r *reader) Read(p []byte) (n int, err error) {
 }
 
 // NewWriter takes a <pre> element and makes an io.Writer out of it.
-func NewWriter(e *dom.HTMLPreElement) io.Writer {
-	return &writer{e: e}
+func NewWriter(pre *dom.HTMLPreElement) io.Writer {
+	return &writer{pre: pre}
 }
 
 type writer struct {
-	e *dom.HTMLPreElement
+	pre *dom.HTMLPreElement
 }
 
 func (w *writer) Write(p []byte) (n int, err error) {
-	w.e.SetTextContent(w.e.TextContent() + string(p))
+	w.pre.SetTextContent(w.pre.TextContent() + string(p))
 	return len(p), nil
 }
