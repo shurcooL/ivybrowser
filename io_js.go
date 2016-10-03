@@ -31,17 +31,15 @@ func init() {
 // NewReader takes an <input> element and makes an io.Reader out of it.
 func NewReader(input *dom.HTMLInputElement) io.Reader {
 	r := &reader{
-		in: make(chan []byte),
+		in: make(chan []byte, 8),
 	}
 	input.AddEventListener("keydown", false, func(event dom.Event) {
 		ke := event.(*dom.KeyboardEvent)
-		go func() {
-			if ke.KeyCode == '\r' {
-				r.in <- []byte(input.Value + "\n")
-				input.Value = ""
-				ke.PreventDefault()
-			}
-		}()
+		if ke.KeyCode == '\r' {
+			r.in <- []byte(input.Value + "\n")
+			input.Value = ""
+			ke.PreventDefault()
+		}
 	})
 	return r
 }
