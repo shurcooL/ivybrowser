@@ -121,5 +121,4 @@ func usage() {
 	fmt.Fprintf(stderr, "usage: ivy [options] [file ...]\n")
 	fmt.Fprintf(stderr, "Flags:\n")
 	flag.PrintDefaults()
-	os.Exit(2)
 }
