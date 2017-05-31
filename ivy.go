@@ -47,7 +47,7 @@ func main() {
 	flag.Parse()
 
 	if *origin != 0 && *origin != 1 {
-		fmt.Fprintf(os.Stderr, "ivy: illegal origin value %d\n", *origin)
+		fmt.Fprintf(stderr, "ivy: illegal origin value %d\n", *origin)
 		os.Exit(2)
 	}
 
@@ -65,7 +65,7 @@ func main() {
 	if len(*debugFlag) > 0 {
 		for _, debug := range strings.Split(*debugFlag, ",") {
 			if !conf.SetDebug(debug, true) {
-				fmt.Fprintf(os.Stderr, "ivy: unknown debug flag %q", debug)
+				fmt.Fprintf(stderr, "ivy: unknown debug flag %q", debug)
 				os.Exit(2)
 			}
 		}
@@ -86,13 +86,13 @@ func main() {
 			interactive := false
 			if name == "-" {
 				interactive = true
-				fd = os.Stdin
+				fd = stdin
 			} else {
 				interactive = false
 				fd, err = os.Open(name)
 			}
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "ivy: %s\n", err)
+				fmt.Fprintf(stderr, "ivy: %s\n", err)
 				os.Exit(1)
 			}
 			scanner := scan.New(context, name, bufio.NewReader(fd))
@@ -118,8 +118,8 @@ func runArgs(context value.Context) {
 }
 
 func usage() {
-	fmt.Fprintf(os.Stderr, "usage: ivy [options] [file ...]\n")
-	fmt.Fprintf(os.Stderr, "Flags:\n")
+	fmt.Fprintf(stderr, "usage: ivy [options] [file ...]\n")
+	fmt.Fprintf(stderr, "Flags:\n")
 	flag.PrintDefaults()
 	os.Exit(2)
 }
