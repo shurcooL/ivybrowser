@@ -1,7 +1,7 @@
 ivybrowser
 ==========
 
-[![Build Status](https://travis-ci.org/shurcooL/ivybrowser.svg?branch=master)](https://travis-ci.org/shurcooL/ivybrowser) [![GoDoc](https://godoc.org/github.com/shurcooL/ivybrowser?status.svg)](https://godoc.org/github.com/shurcooL/ivybrowser)
+[![Go Reference](https://pkg.go.dev/badge/github.com/shurcooL/ivybrowser.svg)](https://pkg.go.dev/github.com/shurcooL/ivybrowser)
 
 ivy in the browser.
 
@@ -11,16 +11,15 @@ I ported it to run in web browsers using GopherJS compiler.
 Installation
 ------------
 
-```bash
-go get -u github.com/shurcooL/ivybrowser
-GOARCH=js go get -u -d github.com/shurcooL/ivybrowser
+```sh
+go install github.com/shurcooL/ivybrowser@latest
 ```
 
 To run ivy in the browser, you'll need [GopherJS](https://github.com/gopherjs/gopherjs#installation-and-usage) compiler.
 
 The quickest way is to run:
 
-```bash
+```sh
 gopherjs serve
 ```
 
@@ -28,7 +27,7 @@ And then visit <http://localhost:8080/github.com/shurcooL/ivybrowser> in your br
 
 Alternatively, you can `cd` into this directory and run:
 
-```bash
+```sh
 gopherjs build
 ```
 
